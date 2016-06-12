@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: api-gateway
+  thymeleaf:
+    cache: false
+
+server:
+  port: 10100
+
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    com.netflix.zuul: 'DEBUG'
+
+eureka:
+  instance:
+     preferIpAddress: true
+     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+zuul:
+  routes:
+    identity_api:
+      path: /api/identity/**
+      strip-prefix: false
+      serviceId: identity
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 30000
